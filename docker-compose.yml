@@ -1,0 +1,16 @@
+services:
+  octoprint:
+    image: octoprint/octoprint:latest
+    restart: unless-stopped
+    ports:
+      - "91:80"
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/video0:/dev/video0
+    environment:
+      - ENABLE_MJPG_STREAMER=true
+    volumes:
+      - octoprint_data:/octoprint
+
+volumes:
+  octoprint_data:
