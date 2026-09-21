@@ -1,16 +1,34 @@
 services:
+  # Prusa MK3 (:91, proxied as /octoprint-mk3). Devices use the stable
+  # /dev/serial/by-id and /dev/v4l/by-id names, because ttyACM*/video* numbers
+  # change whenever something is (re)plugged.
   octoprint:
     image: octoprint/octoprint:latest
     restart: unless-stopped
     ports:
       - "91:80"
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-      - /dev/video0:/dev/video0
+      - /dev/serial/by-id/usb-Prusa_Research__prusa3d.com__Original_Prusa_i3_MK3_CZPX4820X004XK35097-if00:/dev/ttyACM0
+      - /dev/v4l/by-id/usb-046d_C505e_HD_Webcam_4FAEC740-video-index0:/dev/video0
     environment:
       - ENABLE_MJPG_STREAMER=true
     volumes:
       - octoprint_data:/octoprint
 
+  # Prusa MK4 (:92, proxied as /octoprint-mk4) with the Logitech C920.
+  octoprint-mk4:
+    image: octoprint/octoprint:latest
+    restart: unless-stopped
+    ports:
+      - "92:80"
+    devices:
+      - /dev/serial/by-id/usb-Prusa_Research__prusa3d.com__Original_Prusa_MK4_10589-3742441631719701-if00:/dev/ttyACM0
+      - /dev/v4l/by-id/usb-046d_HD_Pro_Webcam_C920_27180D6F-video-index0:/dev/video0
+    environment:
+      - ENABLE_MJPG_STREAMER=true
+    volumes:
+      - octoprint_mk4_data:/octoprint
+
 volumes:
   octoprint_data:
+  octoprint_mk4_data:
