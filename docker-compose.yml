@@ -8,10 +8,12 @@ services:
     ports:
       - "91:80"
     devices:
-      - /dev/serial/by-id/usb-Prusa_Research__prusa3d.com__Original_Prusa_i3_MK3_CZPX4820X004XK35097-if00:/dev/ttyACM0
+      - /dev/serial/by-id/usb-Prusa_Research__prusa3d.com__Original_Prusa_i3_MK3_CZPX0820X004XC72148-if00:/dev/ttyACM0
       - /dev/v4l/by-id/usb-046d_C505e_HD_Webcam_4FAEC740-video-index0:/dev/video0
     environment:
       - ENABLE_MJPG_STREAMER=true
+      # C505e: 720p sensor; 10 fps keeps the MJPEG stream light over Wi-Fi/Tailscale.
+      - MJPG_STREAMER_INPUT=-n -r 1280x720 -f 10
     volumes:
       - octoprint_data:/octoprint
 
@@ -26,6 +28,8 @@ services:
       - /dev/v4l/by-id/usb-046d_HD_Pro_Webcam_C920_27180D6F-video-index0:/dev/video0
     environment:
       - ENABLE_MJPG_STREAMER=true
+      # C920: full 1080p, 10 fps keeps the MJPEG stream light over Wi-Fi/Tailscale.
+      - MJPG_STREAMER_INPUT=-n -r 1920x1080 -f 10
     volumes:
       - octoprint_mk4_data:/octoprint
 
