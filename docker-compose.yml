@@ -13,14 +13,15 @@ x-device-rules: &device-rules
   - "c 81:* rmw"
 
 services:
-  # :91, proxied as /octoprint-mk3. Drives the MK4 with the Logitech C920 since
-  # the printers were physically swapped (the OctoPrint data stays with the port).
+  # MK4 with the Logitech C920, on :92 (proxied as /octoprint-mk4). Since the
+  # printers were physically swapped, this service's data volume (formerly the
+  # MK3 instance's) belongs to the MK4.
   octoprint:
     build: .
     image: octoprint-prusaslicer:latest
     restart: unless-stopped
     ports:
-      - "91:80"
+      - "92:80"
     volumes:
       - octoprint_data:/octoprint
       - /dev:/dev
@@ -33,13 +34,14 @@ services:
       - MJPG_STREAMER_INPUT=-n -r 1920x1080 -f 10
       - SLIC3R_DEFAULT_PROFILE=prusa_mk4_pla
 
-  # :92, proxied as /octoprint-mk4. Drives the MK3 with the Logitech C505e.
+  # MK3 with the Logitech C505e, on :91 (proxied as /octoprint-mk3). Its data
+  # volume (formerly the MK4 instance's) belongs to the MK3.
   octoprint-mk4:
     build: .
     image: octoprint-prusaslicer:latest
     restart: unless-stopped
     ports:
-      - "92:80"
+      - "91:80"
     volumes:
       - octoprint_mk4_data:/octoprint
       - /dev:/dev
