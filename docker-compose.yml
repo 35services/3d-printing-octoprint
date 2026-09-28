@@ -1,9 +1,12 @@
+# Both instances use the local image from ./Dockerfile (OctoPrint + PrusaSlicer).
+# Rebuild after upstream updates: docker compose build --pull
 services:
   # Prusa MK3 (:91, proxied as /octoprint-mk3). Devices use the stable
   # /dev/serial/by-id and /dev/v4l/by-id names, because ttyACM*/video* numbers
   # change whenever something is (re)plugged.
   octoprint:
-    image: octoprint/octoprint:latest
+    build: .
+    image: octoprint-prusaslicer:latest
     restart: unless-stopped
     ports:
       - "91:80"
@@ -14,12 +17,14 @@ services:
       - ENABLE_MJPG_STREAMER=true
       # C505e: 720p sensor; 10 fps keeps the MJPEG stream light over Wi-Fi/Tailscale.
       - MJPG_STREAMER_INPUT=-n -r 1280x720 -f 10
+      - SLIC3R_DEFAULT_PROFILE=prusa_mk3_pla
     volumes:
       - octoprint_data:/octoprint
 
   # Prusa MK4 (:92, proxied as /octoprint-mk4) with the Logitech C920.
   octoprint-mk4:
-    image: octoprint/octoprint:latest
+    build: .
+    image: octoprint-prusaslicer:latest
     restart: unless-stopped
     ports:
       - "92:80"
@@ -30,6 +35,7 @@ services:
       - ENABLE_MJPG_STREAMER=true
       # C920: full 1080p, 10 fps keeps the MJPEG stream light over Wi-Fi/Tailscale.
       - MJPG_STREAMER_INPUT=-n -r 1920x1080 -f 10
+      - SLIC3R_DEFAULT_PROFILE=prusa_mk4_pla
     volumes:
       - octoprint_mk4_data:/octoprint
 
