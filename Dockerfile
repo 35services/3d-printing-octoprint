@@ -24,3 +24,6 @@ RUN mkdir -p /opt/slic3r-profiles \
  && python3 /tmp/slic3r-profiles/convert.py /tmp/slic3r-profiles /opt/slic3r-profiles \
  && rm -rf /tmp/slic3r-profiles
 COPY --chmod=755 slic3r-profiles/cont-init.sh /etc/cont-init.d/10-slic3r-profiles
+
+# Pins each instance to its printer model (PRINTER_PORT_GLOB), see the script.
+COPY --chmod=755 printer-port.sh /etc/cont-init.d/20-printer-port
