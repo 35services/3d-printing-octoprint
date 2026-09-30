@@ -13,7 +13,7 @@ x-device-rules: &device-rules
   - "c 81:* rmw"
 
 services:
-  # MK4 with the Logitech C920, on :92 (proxied as /octoprint-mk4). Since the
+  # MK4 with the Logitech C505e, on :92 (proxied as /octoprint-mk4). Since the
   # printers were physically swapped, this service's data volume (formerly the
   # MK3 instance's) belongs to the MK4.
   octoprint:
@@ -29,12 +29,12 @@ services:
     environment:
       - PRINTER_PORT_GLOB=/dev/serial/by-id/*Original_Prusa_MK4*
       - ENABLE_MJPG_STREAMER=true
-      - CAMERA_DEV=/dev/v4l/by-id/usb-046d_HD_Pro_Webcam_C920_27180D6F-video-index0
-      # C920: full 1080p, 10 fps keeps the MJPEG stream light over Wi-Fi/Tailscale.
-      - MJPG_STREAMER_INPUT=-n -r 1920x1080 -f 10
+      - CAMERA_DEV=/dev/v4l/by-id/usb-046d_C505e_HD_Webcam_4FAEC740-video-index0
+      # C505e: 720p sensor; 10 fps keeps the MJPEG stream light over Wi-Fi/Tailscale.
+      - MJPG_STREAMER_INPUT=-n -r 1280x720 -f 10
       - SLIC3R_DEFAULT_PROFILE=prusa_mk4_pla
 
-  # MK3 with the Logitech C505e, on :91 (proxied as /octoprint-mk3). Its data
+  # MK3 with the Logitech C920, on :91 (proxied as /octoprint-mk3). Its data
   # volume (formerly the MK4 instance's) belongs to the MK3.
   octoprint-mk4:
     build: .
@@ -49,9 +49,9 @@ services:
     environment:
       - PRINTER_PORT_GLOB=/dev/serial/by-id/*Original_Prusa_i3_MK3*
       - ENABLE_MJPG_STREAMER=true
-      - CAMERA_DEV=/dev/v4l/by-id/usb-046d_C505e_HD_Webcam_4FAEC740-video-index0
-      # C505e: 720p sensor; 10 fps keeps the MJPEG stream light over Wi-Fi/Tailscale.
-      - MJPG_STREAMER_INPUT=-n -r 1280x720 -f 10
+      - CAMERA_DEV=/dev/v4l/by-id/usb-046d_HD_Pro_Webcam_C920_27180D6F-video-index0
+      # C920: full 1080p, 10 fps keeps the MJPEG stream light over Wi-Fi/Tailscale.
+      - MJPG_STREAMER_INPUT=-n -r 1920x1080 -f 10
       - SLIC3R_DEFAULT_PROFILE=prusa_mk3_pla
 
 volumes:
